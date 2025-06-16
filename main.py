@@ -1,7 +1,7 @@
 import pygame
 pygame.init()
 
-font = pygame.font.SysFont("Arial", 20) # for words
+font = pygame.font.SysFont("Arial", 20) # for the labels
 
 width, height = 640, 640
 SQ_SIZE = width // 8
@@ -18,6 +18,7 @@ PIECES = {}
 def draw_board(WIN):
     WIN.fill(WHITE)
 
+    # labels
     files = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
     ranks = ['8', '7', '6', '5', '4', '3', '2', '1']
 
@@ -27,6 +28,7 @@ def draw_board(WIN):
             if (row + col) % 2 == 1:
                 pygame.draw.rect(WIN, GRAY, (col * SQ_SIZE, row * SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
+            # draw labels
             if row == 7:
                 letter = files[col]  # A, B, C...
                 label = font.render(letter, True, (0, 0, 0))
@@ -53,7 +55,7 @@ def create_board():
 
 def load_images():
     pieces = ['wP', 'wR', 'wN', 'wB', 'wQ', 'wK', 'bP', 'bR', 'bN', 'bB', 'bQ', 'bK']
-    for piece in pieces:
+    for piece in pieces: 
         PIECES[piece] = pygame.transform.scale(pygame.image.load(f"images/{piece}.png"), (SQ_SIZE, SQ_SIZE))
 
 def draw_pieces(WIN, board):
@@ -69,7 +71,7 @@ def highlight_square(WIN, selected_square):
         highlight_color = (0, 255, 0, 100)  # green highlight
 
         surface = pygame.Surface((SQ_SIZE, SQ_SIZE))
-        surface.set_alpha(100)
+        surface.set_alpha(100) # transparent
         surface.fill((0, 255, 0))
         WIN.blit(surface, (col * SQ_SIZE, row * SQ_SIZE))
 
