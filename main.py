@@ -1,10 +1,12 @@
 import pygame
 pygame.init()
 
-WIDTH, HEIGHT = 640, 640
-SQ_SIZE = WIDTH // 8
+font = pygame.font.SysFont("Arial", 20) # for words
 
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+width, height = 640, 640
+SQ_SIZE = width // 8
+
+WIN = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Chess")
 
 # board colors
@@ -15,11 +17,29 @@ PIECES = {}
 
 def draw_board(WIN):
     WIN.fill(WHITE)
+
+    files = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+    ranks = ['8', '7', '6', '5', '4', '3', '2', '1']
+
     for row in range(8):
         for col in range(8):
             # fill gray only the squares that has odd (row + col)
             if (row + col) % 2 == 1:
-                pygame.draw.rect(WIN, GRAY, (col*SQ_SIZE, row*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+                pygame.draw.rect(WIN, GRAY, (col * SQ_SIZE, row * SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+            if row == 7:
+                letter = files[col]  # A, B, C...
+                label = font.render(letter, True, (0, 0, 0))
+                x = col * SQ_SIZE + 5
+                y = height - 20
+                WIN.blit(label, (x, y))
+
+            if col == 0:
+                number = ranks[row]  # 8, 7, 6...
+                label = font.render(number, True, (0, 0, 0))
+                x = 5
+                y = row * SQ_SIZE + 5
+                WIN.blit(label, (x, y))
 
 def create_board():
     return [ ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"], # black bottom row
@@ -43,7 +63,7 @@ def draw_pieces(WIN, board):
             if piece != "--":
                 WIN.blit(PIECES[piece], (col*SQ_SIZE, row*SQ_SIZE))
 
-def highlight_square(win, selected_square):
+def highlight_square(WIN, selected_square):
     if selected_square:
         row, col = selected_square
         highlight_color = (0, 255, 0, 100)  # green highlight
@@ -51,7 +71,7 @@ def highlight_square(win, selected_square):
         surface = pygame.Surface((SQ_SIZE, SQ_SIZE))
         surface.set_alpha(100)
         surface.fill((0, 255, 0))
-        win.blit(surface, (col * SQ_SIZE, row * SQ_SIZE))
+        WIN.blit(surface, (col * SQ_SIZE, row * SQ_SIZE))
 
 def main():
     running = True
@@ -60,7 +80,6 @@ def main():
     load_images()
 
     selected_square = None # mouse click
-
     current_player = "w" # white starts
 
     while running:
@@ -68,7 +87,7 @@ def main():
         clock.tick(60)
 
         for event in pygame.event.get():
-            # pygame.QUIT is the close window button
+            # pygame.QUIT is the close WINdow button
             if event.type == pygame.QUIT:
                 running = False
             
@@ -90,7 +109,22 @@ def main():
                     if target == '--' or target[0] != current_player:
                         board[row][col] = piece
                         board[start_row][start_col] = "--"
-                        current_player = "b" if current_player == "w" else "w" # change turns
+                        
+                        # print the notation in console
+                        files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+                        ranks = ['8', '7', '6', '5', '4', '3', '2', '1']
+
+                        start_notation = files[start_col] + ranks[start_row]
+                        end_notation = files[col] + ranks[row]
+
+                        print(f"{piece} from {start_notation} to {end_notation}")
+
+
+                        # change turns
+                        if current_player == "w":
+                            current_player = "b"
+                        else:
+                            current_player = "w"
 
                     selected_square = None  # reset 
         
