@@ -59,8 +59,9 @@ def main():
     board = create_board()
     load_images()
 
-    # mouse click
-    selected_square = None
+    selected_square = None # mouse click
+
+    current_player = "w" # white starts
 
     while running:
         # FPS controller
@@ -78,15 +79,18 @@ def main():
 
                 if selected_square is None:
                     # first click
-                    if board[row][col] != "--":
+                    if board[row][col] != "--" and board[row][col][0] == current_player:
                         selected_square = (row, col)
                 else:
                     # second click
                     start_row, start_col = selected_square
                     piece = board[start_row][start_col]
+                    target = board[row][col]
 
-                    board[row][col] = piece  # move piece
-                    board[start_row][start_col] = "--"  # empty old spot
+                    if target == '--' or target[0] != current_player:
+                        board[row][col] = piece
+                        board[start_row][start_col] = "--"
+                        current_player = "b" if current_player == "w" else "w" # change turns
 
                     selected_square = None  # reset 
         
