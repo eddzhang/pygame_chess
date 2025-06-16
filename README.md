@@ -23,7 +23,6 @@ This is a simple chess game viewer built using Python and the Pygame library. It
 ### 🖥️ How to Run
 
 1. Make sure Python 3 and Pygame are installed.  
-   If you don't have Pygame:
 
 2. Place this Python file in a folder.
 
@@ -32,7 +31,7 @@ This is a simple chess game viewer built using Python and the Pygame library. It
     wP.png, wR.png, wN.png, wB.png, wQ.png, wK.png
     bP.png, bR.png, bN.png, bB.png, bQ.png, bK.png
 
-4. Run the Python file:
+4. Run the Python file
 
 5. Click on a piece to select it, then click on a target square to move it.
 
