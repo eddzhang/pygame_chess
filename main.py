@@ -34,7 +34,7 @@ def create_board():
 def load_images():
     pieces = ['wP', 'wR', 'wN', 'wB', 'wQ', 'wK', 'bP', 'bR', 'bN', 'bB', 'bQ', 'bK']
     for piece in pieces:
-        PIECES[piece] = pygame.transform.scale(pygame.image.load(f"../images/{piece}.png"), (SQ_SIZE, SQ_SIZE))
+        PIECES[piece] = pygame.transform.scale(pygame.image.load(f"images/{piece}.png"), (SQ_SIZE, SQ_SIZE))
 
 def draw_pieces(WIN, board):
     for row in range(8):
@@ -43,13 +43,24 @@ def draw_pieces(WIN, board):
             if piece != "--":
                 WIN.blit(PIECES[piece], (col*SQ_SIZE, row*SQ_SIZE))
 
+def highlight_square(win, selected_square):
+    if selected_square:
+        row, col = selected_square
+        highlight_color = (0, 255, 0, 100)  # green highlight
 
+        surface = pygame.Surface((SQ_SIZE, SQ_SIZE))
+        surface.set_alpha(100)
+        surface.fill((0, 255, 0))
+        win.blit(surface, (col * SQ_SIZE, row * SQ_SIZE))
 
 def main():
     running = True
     clock  = pygame.time.Clock()
     board = create_board()
     load_images()
+
+    # mouse click
+    selected_square = None
 
     while running:
         # FPS controller
@@ -59,8 +70,28 @@ def main():
             # pygame.QUIT is the close window button
             if event.type == pygame.QUIT:
                 running = False
+            
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()  # x,y tuple
+                col = pos[0] // SQ_SIZE # map the x coord to a col
+                row = pos[1] // SQ_SIZE # map y coord to a row
+
+                if selected_square is None:
+                    # first click
+                    if board[row][col] != "--":
+                        selected_square = (row, col)
+                else:
+                    # second click
+                    start_row, start_col = selected_square
+                    piece = board[start_row][start_col]
+
+                    board[row][col] = piece  # move piece
+                    board[start_row][start_col] = "--"  # empty old spot
+
+                    selected_square = None  # reset 
         
         draw_board(WIN)
+        highlight_square(WIN, selected_square)
         draw_pieces(WIN, board)
         pygame.display.update()
 
