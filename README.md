@@ -10,6 +10,15 @@ This is a simple chess game viewer built using Python and the Pygame library. It
 - Highlights selected squares
 - Simple click-based movement (no move validation yet)
 - Alternates turns between white and black
+- Prints each move in algebraic notation (e.g., `wN from g1 to f3`)
+
+### 📁 Folder Structure
+    ├── chess.py # Main source file
+    ├── images/ # Folder containing chess piece images
+    │ ├── wP.png
+    │ ├── wR.png
+    │ └── ... (other piece images)
+    └── README.md
 
 ### 🖥️ How to Run
 
